@@ -355,6 +355,30 @@ data.hist(bins='auto', density=True, alpha=0.6, color='#7c3aed', edgecolor='#0d0
 xs = np.linspace(*ax.get_xlim(), 200)
 ax.plot(xs, norm.pdf(xs, mu, sigma), color='#f43f5e', lw=2.5, label=f'Normal μ={mu:.2f} σ={sigma:.2f}')
 ax.set_title(f"Normal Fit — {col}", color='#c4b5fd'); ax.legend(facecolor='#12122a', labelcolor='#c4b5fd'); plt.tight_layout()""",
+    "Binomial Distribution": """\
+n_trials, p_prob = 20, 0.5
+x_vals = np.arange(0, n_trials+1)
+pmf = binom.pmf(x_vals, n_trials, p_prob)
+print(f"Binomial(n={n_trials}, p={p_prob})")
+print(f"Mean={binom.mean(n_trials, p_prob):.4f}  Variance={binom.var(n_trials, p_prob):.4f}")
+fig, ax = plt.subplots(facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
+ax.bar(x_vals, pmf, color='#a855f7', edgecolor='#0d0d1a', alpha=0.7)
+ax.set_xlabel('Number of Successes', color='#94a3b8'); ax.set_ylabel('Probability', color='#94a3b8')
+ax.set_title(f"Binomial Distribution (n={n_trials}, p={p_prob})", color='#c4b5fd')
+ax.tick_params(colors='#64748b'); [s.set_color('rgba(139,92,246,0.2)') for s in ax.spines.values()]
+plt.tight_layout()""",
+    "Poisson Distribution": """\
+lambda_param = 5
+x_vals = np.arange(0, 15)
+pmf = poisson.pmf(x_vals, lambda_param)
+print(f"Poisson(λ={lambda_param})")
+print(f"Mean={poisson.mean(lambda_param):.4f}  Variance={poisson.var(lambda_param):.4f}")
+fig, ax = plt.subplots(facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
+ax.bar(x_vals, pmf, color='#7c3aed', edgecolor='#0d0d1a', alpha=0.7)
+ax.set_xlabel('Count', color='#94a3b8'); ax.set_ylabel('Probability', color='#94a3b8')
+ax.set_title(f"Poisson Distribution (λ={lambda_param})", color='#c4b5fd')
+ax.tick_params(colors='#64748b'); [s.set_color('rgba(139,92,246,0.2)') for s in ax.spines.values()]
+plt.tight_layout()""",
     "Percentiles & Boxplot": """\
 nc = [c for c in df.select_dtypes(include=[np.number]).columns if c.lower() not in ['index','id','sno','unnamed']]
 col = nc[0]; data = df[col].dropna()
@@ -433,6 +457,8 @@ PLAYGROUND_HINTS = {
     "df.plot.hist()": "Bell shape → normality; long tails → skewness.",
     "Central Tendency (Mean, Median, Mode)": "Mean > Median → right-skewed; Mean < Median → left-skewed.",
     "Normal Distribution Fit": "Shapiro-Wilk p > 0.05 → data is consistent with normality.",
+    "Binomial Distribution": "Discrete distribution for success/failure trials. Parameters: n (trials), p (success probability).",
+    "Poisson Distribution": "Models count data. Parameter: λ (rate). Mean = Variance = λ.",
     "Percentiles & Boxplot": "Box = Q1–Q3 (IQR). Points beyond 1.5×IQR whiskers are potential outliers.",
     "Z-Score Outlier Detection": "~0.27% of normally distributed data falls beyond ±3σ.",
     "One-Sample T-Test": "Tests whether sample mean equals a known μ₀. p < 0.05 → significant difference.",
@@ -710,7 +736,12 @@ if uploaded_file is not None:
                     ms_b = ss_b/df_b; ms_w = ss_w/df_w
                     f_crit = stats.f.ppf(1-alpha, df_b, df_w)
 
-                    tc, pc = st.columns([6, 5])
+                    pc, tc = st.columns([5, 6])
+                    with pc:
+                        fig = px.box(adf, x=group_col, y=response_col, points="all", color=group_col,
+                            title=f"{response_col} by {group_col}")
+                        fig.update_layout(**plotly_theme(), showlegend=False)
+                        st.plotly_chart(fig, use_container_width=True)
                     with tc:
                         st.markdown('<h2>ANOVA Table</h2>', unsafe_allow_html=True)
                         st.markdown(f"""<table class="styled-table">
@@ -720,11 +751,6 @@ if uploaded_file is not None:
                         <tr><td><b>Within</b></td><td>{ss_w:.5f}</td><td>{df_w}</td><td>{ms_w:.5f}</td><td></td><td></td><td></td></tr>
                         <tr><td><b>Total</b></td><td>{ss_t:.5f}</td><td>{df_b+df_w}</td><td></td><td></td><td></td><td></td></tr>
                         </tbody></table>""", unsafe_allow_html=True)
-                    with pc:
-                        fig = px.box(adf, x=group_col, y=response_col, points="all", color=group_col,
-                            title=f"{response_col} by {group_col}")
-                        fig.update_layout(**plotly_theme(), showlegend=False)
-                        st.plotly_chart(fig, use_container_width=True)
 
                     st.markdown('<h1>Conclusion</h1>', unsafe_allow_html=True)
                     conclusion_card(p_val, alpha,
@@ -795,7 +821,6 @@ if uploaded_file is not None:
             st.write("")
 
             selected = st.selectbox("Function / Test:", list(PLAYGROUND_CODES.keys()))
-            st.markdown("---")
             col_code, col_out = st.columns(2)
 
             with col_code:
@@ -854,9 +879,8 @@ if uploaded_file is not None:
                         st.info("Executed with no output.")
 
             if selected in PLAYGROUND_HINTS:
-                st.markdown("---")
                 st.markdown(f"""
-                <div style="background:rgba(109,40,217,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:10px;padding:0.9rem 1.2rem;">
+                <div style="background:rgba(109,40,217,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:10px;padding:0.9rem 1.2rem;margin-top:1rem;">
                     <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#7c3aed;letter-spacing:0.1em;">INFERENCE</span><br>
                     <span style="color:#c4b5fd;font-size:0.88rem;">{PLAYGROUND_HINTS[selected]}</span>
                 </div>""", unsafe_allow_html=True)

@@ -18,7 +18,6 @@ from scipy.stats import (
 
 st.set_page_config(
     page_title="StatPortal – Inferential Statistics",
-    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -431,26 +430,7 @@ if len(nc) >= 2:
         whiskerprops=dict(color='#a78bfa'), capprops=dict(color='#a78bfa'))
     ax.set_title(f"Two-Sample T-Test (t={t_stat:.2f}, p={p:.4f})", color='#c4b5fd'); plt.tight_layout()
 else: print("Need at least 2 numerical columns")""",
-    "Correlation Heatmap": """\
-nc = [c for c in df.select_dtypes(include=[np.number]).columns if c.lower() not in ['index','id','sno','unnamed']]
-if len(nc) >= 2:
-    corr_data = df[nc].corr()
-    fig, ax = plt.subplots(figsize=(8, 6), facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
-    sns.heatmap(corr_data, annot=True, fmt='.2f', cmap='coolwarm', center=0, 
-                cbar_kws={'label': 'Correlation'}, ax=ax, square=True)
-    ax.set_title("Correlation Heatmap", color='#c4b5fd', pad=20); plt.tight_layout()
-else: print("Need at least 2 numerical columns")""",
-    "Chi-Square Heatmap": """\
-cc = list(df.select_dtypes(exclude=[np.number]).columns)
-if len(cc) >= 2:
-    col1, col2 = cc[0], cc[1]
-    ct = pd.crosstab(df[col1], df[col2])
-    fig, ax = plt.subplots(figsize=(8, 6), facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
-    sns.heatmap(ct, annot=True, fmt='d', cmap='YlOrRd', cbar_kws={'label': 'Count'}, ax=ax)
-    ax.set_title(f"Chi-Square Heatmap: {col1} vs {col2}", color='#c4b5fd', pad=20)
-    ax.set_xlabel(col2, color='#94a3b8'); ax.set_ylabel(col1, color='#94a3b8')
-    plt.tight_layout()
-else: print("Need at least 2 categorical columns")""",
+    
 }
 
 PLAYGROUND_HINTS = {
@@ -476,7 +456,7 @@ if uploaded_file is not None:
         st.sidebar.success(f"✓ `{uploaded_file.name}`")
         detected_num, detected_cat, _ = detect_columns(df)
 
-        with st.sidebar.expander("⚙️ Column Types"):
+        with st.sidebar.expander(" Column Types"):
             final_num, final_cat = [], []
             for col in df.columns:
                 default = "Numerical" if col in detected_num else "Categorical" if col in detected_cat else "Exclude"
@@ -486,12 +466,12 @@ if uploaded_file is not None:
                 elif choice == "Categorical": final_cat.append(col)
 
         tabs = st.tabs([
-            "📋 Dataset",
-            "📈 Correlation",
-            "📉 Regression",
-            "📊 ANOVA",
-            "🔲 Chi-Square",
-            "🧪 Playground",
+            " Dataset",
+            " Correlation",
+            " Regression",
+            " ANOVA",
+            " Chi-Square",
+            " Playground",
         ])
 
         with tabs[0]:
@@ -932,39 +912,39 @@ if uploaded_file is not None:
 else:
     st.markdown("""
     <div class="upload-box">
-        <div style="font-size:3rem;margin-bottom:0.75rem;">📂</div>
+        <div style="font-size:3rem;margin-bottom:0.75rem;"></div>
         <h3>Upload your dataset to begin</h3>
         <p>Supports <code>.csv</code> and <code>.xlsx</code> — use the sidebar uploader on the left</p>
     </div>
 
     <div class="landing-grid">
         <div class="landing-card">
-            <div class="landing-icon">📈</div>
+            
             <h4>Correlation Analysis</h4>
             <p>Pearson r, R², t-stat, p-value with scatter plot</p>
         </div>
         <div class="landing-card">
-            <div class="landing-icon">📉</div>
+            
             <h4>OLS Regression</h4>
             <p>ANOVA table, coefficients, line fit & residuals</p>
         </div>
         <div class="landing-card">
-            <div class="landing-icon">📊</div>
+            
             <h4>One-Way ANOVA</h4>
             <p>F-value, SS, MS, F-critical with group boxplots</p>
         </div>
         <div class="landing-card">
-            <div class="landing-icon">🔲</div>
+            
             <h4>Chi-Square Test</h4>
             <p>Contingency tables, observed vs expected</p>
         </div>
         <div class="landing-card">
-            <div class="landing-icon">🧪</div>
+        
             <h4>Stats Playground</h4>
             <p>Live code editor — run tests, fits, plots</p>
         </div>
         <div class="landing-card">
-            <div class="landing-icon">🤖</div>
+        
             <h4>Auto H₀ / H₁</h4>
             <p>Hypotheses generated automatically with conclusions</p>
         </div>

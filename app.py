@@ -5,6 +5,7 @@ import scipy.stats as stats
 import statsmodels.api as sm
 import plotly.express as px
 import plotly.graph_objects as go
+import seaborn as sns
 import matplotlib.pyplot as plt
 import sys
 import io
@@ -416,41 +417,40 @@ ax.axvline(data.mean(), color='#10b981', lw=2.5, ls='-',  label=f'Sample mean {d
 ax.axvline(mu0,         color='#f43f5e',   lw=2.5, ls='--', label=f'H₀ mean {mu0:.2f}')
 ax.set_title(f"One-Sample T-Test — {col}", color='#c4b5fd')
 ax.legend(facecolor='#12122a', labelcolor='#c4b5fd'); plt.tight_layout()""",
-    "Two-Sample T-Test": """\
+    "Two-Sample T-Test (Numeric)": """\
 nc = [c for c in df.select_dtypes(include=[np.number]).columns if c.lower() not in ['index','id','sno','unnamed']]
-cc = list(df.select_dtypes(exclude=[np.number]).columns)
-if cc:
-    num_col, cat_col = nc[0], cc[0]
-    grps = df[cat_col].dropna().unique()[:2]
-    g1 = df[df[cat_col]==grps[0]][num_col].dropna(); g2 = df[df[cat_col]==grps[1]][num_col].dropna()
-    l1, l2 = str(grps[0]), str(grps[1])
-else:
+if len(nc) >= 2:
     g1, g2, l1, l2 = df[nc[0]].dropna(), df[nc[1]].dropna(), nc[0], nc[1]
-t_stat, p = ttest_ind(g1, g2, equal_var=False)
-print(f"{l1}: n={len(g1)} mean={g1.mean():.4f}  {l2}: n={len(g2)} mean={g2.mean():.4f}")
-print(f"Welch t={t_stat:.4f}  p={p:.6e}")
-print("REJECT H₀" if p<0.05 else "FAIL TO REJECT H₀")
-fig, ax = plt.subplots(facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
-bp = ax.boxplot([g1, g2], labels=[l1, l2], patch_artist=True,
-    boxprops=dict(facecolor='#7c3aed', alpha=0.5), medianprops=dict(color='#f43f5e', lw=2),
-    whiskerprops=dict(color='#a78bfa'), capprops=dict(color='#a78bfa'))
-ax.set_title(f"Two-Sample T-Test (t={t_stat:.2f}, p={p:.4f})", color='#c4b5fd'); plt.tight_layout()""",
-    "Chi-Square Independence Test": """\
-cc = list(df.select_dtypes(exclude=[np.number]).columns)
-if len(cc)<2: print("Need 2 categorical columns.")
-else:
-    col1, col2 = cc[0], cc[1]; ct = pd.crosstab(df[col1], df[col2])
-    stat, p, dof, exp = chi2_contingency(ct)
-    print(f"χ²={stat:.4f}  df={dof}  p={p:.6e}")
-    print("REJECT H₀ — DEPENDENT" if p<0.05 else "FAIL TO REJECT H₀ — INDEPENDENT")
+    t_stat, p = ttest_ind(g1, g2, equal_var=False)
+    print(f"{l1}: n={len(g1)} mean={g1.mean():.4f}  {l2}: n={len(g2)} mean={g2.mean():.4f}")
+    print(f"Welch t={t_stat:.4f}  p={p:.6e}")
+    print("REJECT H₀" if p<0.05 else "FAIL TO REJECT H₀")
     fig, ax = plt.subplots(facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
-    im = ax.imshow(ct.values, cmap='Purples')
-    plt.colorbar(im, ax=ax, shrink=0.8)
-    ax.set_xticks(range(len(ct.columns))); ax.set_xticklabels(ct.columns, rotation=30, ha='right', color='#94a3b8')
-    ax.set_yticks(range(len(ct.index)));   ax.set_yticklabels(ct.index, color='#94a3b8')
-    for i in range(len(ct.index)):
-        for j in range(len(ct.columns)): ax.text(j, i, ct.values[i,j], ha='center', va='center', fontsize=8, color='white')
-    ax.set_title(f"Chi-Square — {col1} vs {col2}  (p={p:.4f})", color='#c4b5fd'); plt.tight_layout()""",
+    bp = ax.boxplot([g1, g2], labels=[l1, l2], patch_artist=True,
+        boxprops=dict(facecolor='#7c3aed', alpha=0.5), medianprops=dict(color='#f43f5e', lw=2),
+        whiskerprops=dict(color='#a78bfa'), capprops=dict(color='#a78bfa'))
+    ax.set_title(f"Two-Sample T-Test (t={t_stat:.2f}, p={p:.4f})", color='#c4b5fd'); plt.tight_layout()
+else: print("Need at least 2 numerical columns")""",
+    "Correlation Heatmap": """\
+nc = [c for c in df.select_dtypes(include=[np.number]).columns if c.lower() not in ['index','id','sno','unnamed']]
+if len(nc) >= 2:
+    corr_data = df[nc].corr()
+    fig, ax = plt.subplots(figsize=(8, 6), facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
+    sns.heatmap(corr_data, annot=True, fmt='.2f', cmap='coolwarm', center=0, 
+                cbar_kws={'label': 'Correlation'}, ax=ax, square=True)
+    ax.set_title("Correlation Heatmap", color='#c4b5fd', pad=20); plt.tight_layout()
+else: print("Need at least 2 numerical columns")""",
+    "Chi-Square Heatmap": """\
+cc = list(df.select_dtypes(exclude=[np.number]).columns)
+if len(cc) >= 2:
+    col1, col2 = cc[0], cc[1]
+    ct = pd.crosstab(df[col1], df[col2])
+    fig, ax = plt.subplots(figsize=(8, 6), facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
+    sns.heatmap(ct, annot=True, fmt='d', cmap='YlOrRd', cbar_kws={'label': 'Count'}, ax=ax)
+    ax.set_title(f"Chi-Square Heatmap: {col1} vs {col2}", color='#c4b5fd', pad=20)
+    ax.set_xlabel(col2, color='#94a3b8'); ax.set_ylabel(col1, color='#94a3b8')
+    plt.tight_layout()
+else: print("Need at least 2 categorical columns")""",
 }
 
 PLAYGROUND_HINTS = {
@@ -462,8 +462,9 @@ PLAYGROUND_HINTS = {
     "Percentiles & Boxplot": "Box = Q1–Q3 (IQR). Points beyond 1.5×IQR whiskers are potential outliers.",
     "Z-Score Outlier Detection": "~0.27% of normally distributed data falls beyond ±3σ.",
     "One-Sample T-Test": "Tests whether sample mean equals a known μ₀. p < 0.05 → significant difference.",
-    "Two-Sample T-Test": "Welch's t-test (unequal variance). p < 0.05 → groups have different population means.",
-    "Chi-Square Independence Test": "p < 0.05 → variables are statistically associated (not independent).",
+    "Two-Sample T-Test (Numeric)": "Compares two numerical columns. Welch's t-test (unequal variance).",
+    "Correlation Heatmap": "Shows Pearson correlation between all numerical columns.",
+    "Chi-Square Heatmap": "Contingency table visualization for categorical associations.",
 }
 
 
@@ -570,6 +571,22 @@ if uploaded_file is not None:
                         fig.update_layout(**plotly_theme())
                         fig.update_traces(marker=dict(color="#a855f7", size=6, opacity=0.6))
                         st.plotly_chart(fig, use_container_width=True)
+
+                    st.markdown('<h2>Correlation Heatmap</h2>', unsafe_allow_html=True)
+                    if len(final_num) >= 2:
+                        corr_matrix = df[final_num].corr()
+                        fig_heat = go.Figure(data=go.Heatmap(
+                            z=corr_matrix.values,
+                            x=corr_matrix.columns,
+                            y=corr_matrix.columns,
+                            colorscale='RdBu',
+                            zmid=0,
+                            text=np.round(corr_matrix.values, 2),
+                            texttemplate='%{text}',
+                            textfont={"size": 10},
+                        ))
+                        fig_heat.update_layout(**plotly_theme(), title="All Correlations", height=500)
+                        st.plotly_chart(fig_heat, use_container_width=True)
 
                     st.markdown('<h1>Conclusion</h1>', unsafe_allow_html=True)
                     conclusion_card(p_val, alpha,
@@ -783,6 +800,33 @@ if uploaded_file is not None:
                     t2.markdown('<h2>Expected Frequencies</h2>', unsafe_allow_html=True)
                     t2.dataframe(exp_table.style.format("{:.2f}"), use_container_width=True)
 
+                    st.markdown('<h2>Heatmaps</h2>', unsafe_allow_html=True)
+                    h1, h2 = st.columns(2)
+                    with h1:
+                        fig_obs = go.Figure(data=go.Heatmap(
+                            z=obs_table.values,
+                            x=obs_table.columns,
+                            y=obs_table.index,
+                            colorscale='Blues',
+                            text=obs_table.values,
+                            texttemplate='%{text}',
+                            textfont={"size": 10},
+                        ))
+                        fig_obs.update_layout(**plotly_theme(), title="Observed Frequencies", height=400)
+                        st.plotly_chart(fig_obs, use_container_width=True)
+                    with h2:
+                        fig_exp = go.Figure(data=go.Heatmap(
+                            z=exp_table.values,
+                            x=exp_table.columns,
+                            y=exp_table.index,
+                            colorscale='Greens',
+                            text=np.round(exp_table.values, 2),
+                            texttemplate='%{text}',
+                            textfont={"size": 10},
+                        ))
+                        fig_exp.update_layout(**plotly_theme(), title="Expected Frequencies", height=400)
+                        st.plotly_chart(fig_exp, use_container_width=True)
+
                     rc, pc = st.columns(2)
                     with rc:
                         st.markdown('<h2>Test Statistics</h2>', unsafe_allow_html=True)
@@ -832,7 +876,7 @@ if uploaded_file is not None:
                 st.markdown('<h2>Live Output</h2>', unsafe_allow_html=True)
                 env = {
                     '__builtins__': builtins,
-                    'df': df, 'pd': pd, 'np': np, 'plt': plt,
+                    'df': df, 'pd': pd, 'np': np, 'plt': plt, 'sns': sns,
                     'norm': norm, 'binom': binom, 'poisson': poisson,
                     't': t_dist, 'f': f_dist,
                     'shapiro': shapiro,

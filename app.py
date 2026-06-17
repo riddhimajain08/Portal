@@ -15,7 +15,6 @@ from scipy.stats import (
     chisquare, chi2_contingency, linregress
 )
 
-# ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="StatPortal – Inferential Statistics",
     page_icon="📊",
@@ -23,19 +22,16 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ── CSS ───────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* ── Base ── */
 html, body, [class*="css"] {
     font-family: 'Inter', sans-serif;
     background-color: #0a0a12;
     color: #e2e8f0;
 }
 
-/* ── Sidebar ── */
 [data-testid="stSidebar"] {
     background: linear-gradient(180deg, #0d0d1a 0%, #12122a 100%);
     border-right: 1px solid rgba(139, 92, 246, 0.2);
@@ -44,10 +40,8 @@ html, body, [class*="css"] {
 [data-testid="stSidebar"] .stSlider > div > div > div { background: #7c3aed !important; }
 [data-testid="stSidebar"] label { color: #a78bfa !important; font-size: 0.85rem !important; }
 
-/* ── Main background ── */
 .main .block-container { background: transparent; padding-top: 1.5rem; }
 
-/* ── Hero header ── */
 .hero {
     background: radial-gradient(ellipse at 20% 50%, rgba(109,40,217,0.25) 0%, transparent 60%),
                 radial-gradient(ellipse at 80% 50%, rgba(168,85,247,0.15) 0%, transparent 60%),
@@ -102,7 +96,6 @@ html, body, [class*="css"] {
     letter-spacing: 0.02em;
 }
 
-/* ── Landing page ── */
 .landing-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -138,7 +131,6 @@ html, body, [class*="css"] {
 .upload-box h3 { color: #c4b5fd; margin-bottom: 0.5rem; }
 .upload-box p { color: #64748b; font-size: 0.9rem; }
 
-/* ── Metric cards ── */
 .metric-card {
     background: rgba(109,40,217,0.08);
     border: 1px solid rgba(139,92,246,0.2);
@@ -163,7 +155,6 @@ html, body, [class*="css"] {
 .metric-label { color: #7c3aed; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; font-family: 'JetBrains Mono', monospace; }
 .metric-val { font-size: 2rem; font-weight: 700; margin: 4px 0 0 0; font-family: 'JetBrains Mono', monospace; }
 
-/* ── Result / conclusion cards ── */
 .result-card {
     border-left: 4px solid #7c3aed;
     border-radius: 0 12px 12px 0;
@@ -188,7 +179,6 @@ html, body, [class*="css"] {
 .badge-sig   { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
 .badge-insig { background: rgba(244,63,94,0.15);  color: #fb7185; border: 1px solid rgba(244,63,94,0.3); }
 
-/* ── Styled tables ── */
 .styled-table {
     width: 100%; border-collapse: collapse; margin: 0.75rem 0;
     font-size: 0.88rem; border-radius: 10px; overflow: hidden;
@@ -208,7 +198,6 @@ html, body, [class*="css"] {
 }
 .styled-table tr:hover td { background: rgba(139,92,246,0.06); }
 
-/* ── Section headers ── */
 h1, h2, h3 { color: #e2e8f0 !important; }
 .stTabs [data-baseweb="tab-list"] {
     gap: 4px;
@@ -232,10 +221,8 @@ h1, h2, h3 { color: #e2e8f0 !important; }
     box-shadow: 0 4px 15px rgba(124,58,237,0.4);
 }
 
-/* ── Plotly charts background ── */
 .js-plotly-plot { border-radius: 12px; overflow: hidden; }
 
-/* ── Streamlit element overrides ── */
 .stDataFrame { border-radius: 10px; overflow: hidden; }
 .stSelectbox > div > div { background: #12122a !important; border-color: rgba(139,92,246,0.3) !important; border-radius: 8px !important; color: #e2e8f0 !important; }
 .stMultiSelect > div > div { background: #12122a !important; border-color: rgba(139,92,246,0.3) !important; border-radius: 8px !important; }
@@ -249,7 +236,6 @@ div[data-testid="stTextArea"] textarea {
 }
 .stAlert { border-radius: 10px !important; }
 
-/* ── Section divider ── */
 .section-label {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.7rem;
@@ -263,19 +249,16 @@ div[data-testid="stTextArea"] textarea {
 </style>
 """, unsafe_allow_html=True)
 
-# ── Header ────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="hero">
-    <div class="hero-tag">// inferential statistics engine</div>
     <div class="hero-title">StatPortal</div>
     <div class="hero-sub">Upload → Detect → Analyse → Conclude &nbsp;·&nbsp; Automated hypothesis testing for your data</div>
 </div>
 """, unsafe_allow_html=True)
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
 st.sidebar.markdown("""
 <div style="text-align:center;padding:1rem 0 0.5rem;font-family:'JetBrains Mono',monospace;font-size:1.1rem;color:#a78bfa;letter-spacing:0.1em;">
-📊 STATPORTAL
+STATPORTAL
 </div>
 """, unsafe_allow_html=True)
 st.sidebar.markdown("---")
@@ -287,7 +270,6 @@ st.sidebar.markdown('<div class="section-label">dataset</div>', unsafe_allow_htm
 uploaded_file = st.sidebar.file_uploader("Upload CSV or Excel", type=["csv", "xlsx"])
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
 @st.cache_data
 def load_data(file):
     ext = file.name.rsplit(".", 1)[-1].lower()
@@ -325,7 +307,7 @@ def conclusion_card(p_val, alpha, reject_text, fail_text):
     sig = p_val < alpha
     cls = "reject" if sig else "fail-reject"
     badge_cls = "badge-sig" if sig else "badge-insig"
-    icon = "✓ REJECT H₀" if sig else "✗ FAIL TO REJECT H₀"
+    icon = "REJECT H₀" if sig else "FAIL TO REJECT H₀"
     label = f"{icon}  ·  α = {alpha}"
     text = reject_text if sig else fail_text
     st.markdown(f"""
@@ -335,7 +317,6 @@ def conclusion_card(p_val, alpha, reject_text, fail_text):
     </div>""", unsafe_allow_html=True)
 
 
-# ── Playground snippets ───────────────────────────────────────────────────────
 PLAYGROUND_CODES = {
     "df.head()": "df.head(5)",
     "df.describe()": "df.describe()",
@@ -399,27 +380,12 @@ ax.axvline(mean+3*std, color='#f43f5e', lw=1.5, ls='--', label='+3σ')
 ax.axvline(mean-3*std, color='#f43f5e', lw=1.5, ls='--', label='-3σ')
 ax.set_title(f"Z-Score Outlier Detection — {col}", color='#c4b5fd')
 ax.legend(facecolor='#12122a', labelcolor='#c4b5fd'); plt.tight_layout()""",
-    "Linear Regression & Correlation": """\
-nc = [c for c in df.select_dtypes(include=[np.number]).columns if c.lower() not in ['index','id','sno','unnamed']]
-x_col, y_col = nc[0], nc[1]; data = df[[x_col, y_col]].dropna()
-x, y = data[x_col].values, data[y_col].values
-slope, intercept, r, p_val, se = linregress(x, y); r2 = r**2
-strength = "strong" if abs(r)>0.7 else ("moderate" if abs(r)>0.4 else "weak")
-print(f"X={x_col}  Y={y_col}\\nr={r:.4f} ({strength})  R²={r2:.4f}  Y={slope:.4f}X+{intercept:.4f}  p={p_val:.4e}")
-print("→ Significant (p<0.05)" if p_val<0.05 else "→ NOT significant")
-x_line = np.linspace(x.min(), x.max(), 200)
-fig, ax = plt.subplots(facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
-ax.scatter(x, y, alpha=0.5, color='#7c3aed', s=20, label='Data', edgecolors='none')
-ax.plot(x_line, slope*x_line+intercept, color='#f43f5e', lw=2.5, label=f'Fit r={r:.2f} R²={r2:.2f}')
-ax.set_xlabel(x_col, color='#94a3b8'); ax.set_ylabel(y_col, color='#94a3b8')
-ax.set_title(f"Linear Regression — {y_col} vs {x_col}", color='#c4b5fd')
-ax.legend(facecolor='#12122a', labelcolor='#c4b5fd'); plt.tight_layout()""",
     "One-Sample T-Test": """\
 nc = [c for c in df.select_dtypes(include=[np.number]).columns if c.lower() not in ['index','id','sno','unnamed']]
 col = nc[0]; data = df[col].dropna(); mu0 = data.mean() * 0.95
 t_stat, p = ttest_1samp(data, mu0)
 print(f"Column={col}  n={len(data)}  mean={data.mean():.4f}  μ₀={mu0:.4f}  t={t_stat:.4f}  p={p:.6e}")
-print("✅ REJECT H₀ (p<0.05)" if p<0.05 else "❌ FAIL TO REJECT H₀")
+print("REJECT H₀ (p<0.05)" if p<0.05 else "FAIL TO REJECT H₀")
 fig, ax = plt.subplots(facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
 data.hist(bins='auto', density=True, alpha=0.6, color='#7c3aed', edgecolor='#0d0d1a', ax=ax)
 ax.axvline(data.mean(), color='#10b981', lw=2.5, ls='-',  label=f'Sample mean {data.mean():.2f}')
@@ -439,29 +405,12 @@ else:
 t_stat, p = ttest_ind(g1, g2, equal_var=False)
 print(f"{l1}: n={len(g1)} mean={g1.mean():.4f}  {l2}: n={len(g2)} mean={g2.mean():.4f}")
 print(f"Welch t={t_stat:.4f}  p={p:.6e}")
-print("✅ REJECT H₀" if p<0.05 else "❌ FAIL TO REJECT H₀")
+print("REJECT H₀" if p<0.05 else "FAIL TO REJECT H₀")
 fig, ax = plt.subplots(facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
 bp = ax.boxplot([g1, g2], labels=[l1, l2], patch_artist=True,
     boxprops=dict(facecolor='#7c3aed', alpha=0.5), medianprops=dict(color='#f43f5e', lw=2),
     whiskerprops=dict(color='#a78bfa'), capprops=dict(color='#a78bfa'))
 ax.set_title(f"Two-Sample T-Test (t={t_stat:.2f}, p={p:.4f})", color='#c4b5fd'); plt.tight_layout()""",
-    "One-Way ANOVA": """\
-nc = [c for c in df.select_dtypes(include=[np.number]).columns if c.lower() not in ['index','id','sno','unnamed']]
-cc = list(df.select_dtypes(exclude=[np.number]).columns)
-if not cc: print("Need a categorical column for grouping.")
-else:
-    num_col, cat_col = nc[0], cc[0]
-    grps = df[cat_col].dropna().unique()
-    gdata = [df[df[cat_col]==g][num_col].dropna() for g in grps if len(df[df[cat_col]==g][num_col].dropna())>1]
-    f_stat, p = f_oneway(*gdata)
-    print(f"Factor={cat_col}  Metric={num_col}  F={f_stat:.4f}  p={p:.6e}")
-    print("✅ REJECT H₀" if p<0.05 else "❌ FAIL TO REJECT H₀")
-    fig, ax = plt.subplots(facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
-    ax.boxplot(gdata, labels=[str(g)[:12] for g in grps if len(df[df[cat_col]==g][num_col].dropna())>1],
-        patch_artist=True, boxprops=dict(facecolor='#7c3aed', alpha=0.5), medianprops=dict(color='#f43f5e', lw=2),
-        whiskerprops=dict(color='#a78bfa'), capprops=dict(color='#a78bfa'))
-    ax.set_title(f"One-Way ANOVA — {num_col} by {cat_col}  (F={f_stat:.2f}, p={p:.4f})", color='#c4b5fd')
-    plt.xticks(rotation=30, ha='right'); plt.tight_layout()""",
     "Chi-Square Independence Test": """\
 cc = list(df.select_dtypes(exclude=[np.number]).columns)
 if len(cc)<2: print("Need 2 categorical columns.")
@@ -469,7 +418,7 @@ else:
     col1, col2 = cc[0], cc[1]; ct = pd.crosstab(df[col1], df[col2])
     stat, p, dof, exp = chi2_contingency(ct)
     print(f"χ²={stat:.4f}  df={dof}  p={p:.6e}")
-    print("✅ REJECT H₀ — DEPENDENT" if p<0.05 else "❌ FAIL TO REJECT H₀ — INDEPENDENT")
+    print("REJECT H₀ — DEPENDENT" if p<0.05 else "FAIL TO REJECT H₀ — INDEPENDENT")
     fig, ax = plt.subplots(facecolor='#0d0d1a'); ax.set_facecolor('#0d0d1a')
     im = ax.imshow(ct.values, cmap='Purples')
     plt.colorbar(im, ax=ax, shrink=0.8)
@@ -486,19 +435,16 @@ PLAYGROUND_HINTS = {
     "Normal Distribution Fit": "Shapiro-Wilk p > 0.05 → data is consistent with normality.",
     "Percentiles & Boxplot": "Box = Q1–Q3 (IQR). Points beyond 1.5×IQR whiskers are potential outliers.",
     "Z-Score Outlier Detection": "~0.27% of normally distributed data falls beyond ±3σ.",
-    "Linear Regression & Correlation": "r ∈ [−1, +1] measures linear association. R² = % variance in Y explained by X.",
     "One-Sample T-Test": "Tests whether sample mean equals a known μ₀. p < 0.05 → significant difference.",
     "Two-Sample T-Test": "Welch's t-test (unequal variance). p < 0.05 → groups have different population means.",
-    "One-Way ANOVA": "F = between-group / within-group variance. p < 0.05 → at least one group mean differs.",
     "Chi-Square Independence Test": "p < 0.05 → variables are statistically associated (not independent).",
 }
 
 
-# ── Main app logic ─────────────────────────────────────────────────────────────
 if uploaded_file is not None:
     df, err = load_data(uploaded_file)
     if err:
-        st.error(f"❌ Error loading file: {err}")
+        st.error(f"Error loading file: {err}")
     else:
         st.sidebar.success(f"✓ `{uploaded_file.name}`")
         detected_num, detected_cat, _ = detect_columns(df)
@@ -512,21 +458,17 @@ if uploaded_file is not None:
                 if choice == "Numerical": final_num.append(col)
                 elif choice == "Categorical": final_cat.append(col)
 
-        # ── Tabs ──────────────────────────────────────────────────────────────
         tabs = st.tabs([
-            "📋  Dataset",
-            "📈  Correlation",
-            "📉  Regression",
-            "📊  ANOVA",
-            "🔲  Chi-Square",
-            "🧪  Playground",
+            "📋 Dataset",
+            "📈 Correlation",
+            "📉 Regression",
+            "📊 ANOVA",
+            "🔲 Chi-Square",
+            "🧪 Playground",
         ])
 
-        # ═════════════════════════════════════════════════════════════════════
-        # TAB 1 — DATASET
-        # ═════════════════════════════════════════════════════════════════════
         with tabs[0]:
-            st.markdown('<div class="section-label">// dataset overview</div>', unsafe_allow_html=True)
+            st.markdown('<h1>Dataset Overview</h1>', unsafe_allow_html=True)
             c1, c2, c3, c4 = st.columns(4)
             for col_obj, label, val, color in [
                 (c1, "Rows",        df.shape[0],    "#e2e8f0"),
@@ -541,12 +483,12 @@ if uploaded_file is not None:
                     </div>""", unsafe_allow_html=True)
 
             st.write("")
-            st.markdown('<div class="section-label">// raw data preview</div>', unsafe_allow_html=True)
+            st.markdown('<h2>Raw Data Preview</h2>', unsafe_allow_html=True)
             st.dataframe(df.head(10), use_container_width=True)
 
             left, right = st.columns(2)
             with left:
-                st.markdown('<div class="section-label">// column info & missing values</div>', unsafe_allow_html=True)
+                st.markdown('<h2>Column Info & Missing Values</h2>', unsafe_allow_html=True)
                 info = []
                 for col in df.columns:
                     miss = df[col].isnull().sum()
@@ -554,17 +496,14 @@ if uploaded_file is not None:
                     info.append([col, str(df[col].dtype), atype, f"{miss} ({miss/len(df)*100:.1f}%)"])
                 st.table(pd.DataFrame(info, columns=["Column", "Dtype", "Type", "Missing"]))
             with right:
-                st.markdown('<div class="section-label">// numerical summary statistics</div>', unsafe_allow_html=True)
+                st.markdown('<h2>Numerical Summary Statistics</h2>', unsafe_allow_html=True)
                 if final_num:
                     st.dataframe(df[final_num].describe().T, use_container_width=True)
                 else:
                     st.info("No numerical columns detected.")
 
-        # ═════════════════════════════════════════════════════════════════════
-        # TAB 2 — CORRELATION
-        # ═════════════════════════════════════════════════════════════════════
         with tabs[1]:
-            st.markdown('<div class="section-label">// pearson correlation analysis</div>', unsafe_allow_html=True)
+            st.markdown('<h1>Pearson Correlation Analysis</h1>', unsafe_allow_html=True)
             if len(final_num) < 2:
                 st.warning("Need at least 2 numerical columns.")
             else:
@@ -576,7 +515,7 @@ if uploaded_file is not None:
                 if len(cdf) < 3:
                     st.error("Need at least 3 non-null rows.")
                 else:
-                    st.markdown('<div class="section-label">// hypothesis</div>', unsafe_allow_html=True)
+                    st.markdown('<h2>Hypothesis</h2>', unsafe_allow_html=True)
                     st.latex(r"H_0: \rho = 0 \qquad H_1: \rho \neq 0")
 
                     r_coef, p_val = stats.pearsonr(cdf[var_x], cdf[var_y])
@@ -585,7 +524,7 @@ if uploaded_file is not None:
 
                     rc, pc = st.columns(2)
                     with rc:
-                        st.markdown('<div class="section-label">// calculations</div>', unsafe_allow_html=True)
+                        st.markdown('<h2>Calculations</h2>', unsafe_allow_html=True)
                         st.markdown(f"""<table class="styled-table">
                         <thead><tr><th>Metric</th><th>Value</th><th>Excel</th></tr></thead>
                         <tbody>
@@ -597,25 +536,22 @@ if uploaded_file is not None:
                         </tbody></table>""", unsafe_allow_html=True)
                         strength = "strong" if abs(r_coef)>=0.7 else "moderate" if abs(r_coef)>=0.4 else "weak"
                         direction = "positive" if r_coef > 0 else "negative"
-                        st.markdown(f"<br><span style='color:#a78bfa;font-family:JetBrains Mono,monospace;font-size:0.85rem;'>→ {strength} {direction} correlation &nbsp;(r = {r_coef:.3f})</span>", unsafe_allow_html=True)
+                        st.markdown(f"<br><span style='color:#a78bfa;font-family:JetBrains Mono,monospace;font-size:0.85rem;'>→ {strength} {direction} correlation (r = {r_coef:.3f})</span>", unsafe_allow_html=True)
                     with pc:
-                        st.markdown('<div class="section-label">// scatter plot</div>', unsafe_allow_html=True)
+                        st.markdown('<h2>Scatter Plot</h2>', unsafe_allow_html=True)
                         fig = px.scatter(cdf, x=var_x, y=var_y, trendline="ols",
                             trendline_color_override="#f43f5e")
                         fig.update_layout(**plotly_theme())
                         fig.update_traces(marker=dict(color="#a855f7", size=6, opacity=0.6))
                         st.plotly_chart(fig, use_container_width=True)
 
-                    st.markdown('<div class="section-label">// conclusion</div>', unsafe_allow_html=True)
+                    st.markdown('<h1>Conclusion</h1>', unsafe_allow_html=True)
                     conclusion_card(p_val, alpha,
-                        f"p-value <b>{p_fmt(p_val)}</b> &lt; α={alpha} → <strong>reject H₀</strong>. Significant linear correlation between <code>{var_x}</code> and <code>{var_y}</code>.",
-                        f"p-value <b>{p_fmt(p_val)}</b> ≥ α={alpha} → <strong>fail to reject H₀</strong>. Insufficient evidence of linear correlation between <code>{var_x}</code> and <code>{var_y}</code>.")
+                        f"p-value = {p_fmt(p_val)} < α={alpha}. Reject H₀. Significant linear correlation between {var_x} and {var_y}.",
+                        f"p-value = {p_fmt(p_val)} ≥ α={alpha}. Fail to reject H₀. No significant linear correlation between {var_x} and {var_y}.")
 
-        # ═════════════════════════════════════════════════════════════════════
-        # TAB 3 — LINEAR REGRESSION
-        # ═════════════════════════════════════════════════════════════════════
         with tabs[2]:
-            st.markdown('<div class="section-label">// OLS linear regression</div>', unsafe_allow_html=True)
+            st.markdown('<h1>OLS Linear Regression</h1>', unsafe_allow_html=True)
             if len(final_num) < 2:
                 st.warning("Need at least 2 numerical columns.")
             else:
@@ -639,7 +575,7 @@ if uploaded_file is not None:
                             st.error(f"Regression error: {e}")
                             st.stop()
 
-                        st.markdown('<div class="section-label">// hypothesis</div>', unsafe_allow_html=True)
+                        st.markdown('<h2>Hypothesis</h2>', unsafe_allow_html=True)
                         st.latex(r"H_0: \beta_1 = \dots = \beta_p = 0 \qquad H_1: \text{At least one } \beta_j \neq 0")
 
                         r2, adj_r2 = model.rsquared, model.rsquared_adj
@@ -650,7 +586,7 @@ if uploaded_file is not None:
 
                         s1, s2 = st.columns(2)
                         with s1:
-                            st.markdown('<div class="section-label">// regression statistics</div>', unsafe_allow_html=True)
+                            st.markdown('<h2>Regression Statistics</h2>', unsafe_allow_html=True)
                             st.markdown(f"""<table class="styled-table">
                             <tr><td><b>Multiple R</b></td><td>{np.sqrt(r2):.5f}</td></tr>
                             <tr><td><b>R²</b></td><td>{r2:.5f}</td></tr>
@@ -663,7 +599,7 @@ if uploaded_file is not None:
                             ss_reg = model.ess; ss_res = model.ssr; ss_tot = ss_reg + ss_res
                             ms_reg = ss_reg/df_m if df_m>0 else 0
                             ms_res = ss_res/df_r if df_r>0 else 0
-                            st.markdown('<div class="section-label">// ANOVA table</div>', unsafe_allow_html=True)
+                            st.markdown('<h2>ANOVA Table</h2>', unsafe_allow_html=True)
                             st.markdown(f"""<table class="styled-table">
                             <thead><tr><th>Source</th><th>df</th><th>SS</th><th>MS</th><th>F</th><th>p-value</th></tr></thead>
                             <tbody>
@@ -672,7 +608,7 @@ if uploaded_file is not None:
                             <tr><td><b>Total</b></td><td>{df_m+df_r}</td><td>{ss_tot:.3f}</td><td></td><td></td><td></td></tr>
                             </tbody></table>""", unsafe_allow_html=True)
 
-                        st.markdown('<div class="section-label">// coefficients table</div>', unsafe_allow_html=True)
+                        st.markdown('<h2>Coefficients Table</h2>', unsafe_allow_html=True)
                         coef_rows = []
                         for v in X.columns:
                             ci = model.conf_int().loc[v]
@@ -688,7 +624,7 @@ if uploaded_file is not None:
                             "Lower 95%":"{:.5f}","Upper 95%":"{:.5f}"
                         }), use_container_width=True)
 
-                        st.markdown('<div class="section-label">// regression equation</div>', unsafe_allow_html=True)
+                        st.markdown('<h2>Regression Equation</h2>', unsafe_allow_html=True)
                         terms = []
                         for v in X.columns:
                             c = model.params[v]
@@ -699,7 +635,7 @@ if uploaded_file is not None:
                                 terms.append(f"{sign} {abs(c):.4f} \\times \\text{{{v.replace('_',' ')}}}")
                         st.latex(rf"\hat{{Y}} = " + " ".join(terms))
 
-                        st.markdown('<div class="section-label">// diagnostic plots</div>', unsafe_allow_html=True)
+                        st.markdown('<h2>Diagnostic Plots</h2>', unsafe_allow_html=True)
                         clean["Predicted"] = model.fittedvalues
                         clean["Residuals"] = model.resid
                         d1, d2 = st.columns(2)
@@ -733,16 +669,13 @@ if uploaded_file is not None:
                             fig_res.update_layout(**plotly_theme())
                             st.plotly_chart(fig_res, use_container_width=True)
 
-                        st.markdown('<div class="section-label"> conclusion</div>', unsafe_allow_html=True)
+                        st.markdown('<h1>Conclusion</h1>', unsafe_allow_html=True)
                         conclusion_card(f_pval, alpha,
-                            f"F-stat p-value <b>{p_fmt(f_pval)}</b> &lt; α={alpha} → <strong>reject H₀</strong>. Model is significant. R² = {r2*100:.2f}% of variance in <code>{dep_var}</code> explained.",
-                            f"F-stat p-value <b>{p_fmt(f_pval)}</b> ≥ α={alpha} → <strong>fail to reject H₀</strong>. Model is not statistically significant.")
+                            f"F-stat p-value = {p_fmt(f_pval)} < α={alpha}. Reject H₀. Model is significant. R² = {r2*100:.2f}% of variance explained.",
+                            f"F-stat p-value = {p_fmt(f_pval)} ≥ α={alpha}. Fail to reject H₀. Model is not statistically significant.")
 
-        # ═════════════════════════════════════════════════════════════════════
-        # TAB 4 — ANOVA
-        # ═════════════════════════════════════════════════════════════════════
         with tabs[3]:
-            st.markdown('<div class="section-label">// one-way analysis of variance</div>', unsafe_allow_html=True)
+            st.markdown('<h1>One-Way Analysis of Variance</h1>', unsafe_allow_html=True)
             if not final_cat or not final_num:
                 st.warning("Need at least 1 categorical (grouping) and 1 numerical (response) column.")
             else:
@@ -755,13 +688,13 @@ if uploaded_file is not None:
                 if len(unique_grps) < 2:
                     st.error("Need at least 2 groups.")
                 else:
-                    st.markdown('<div class="section-label">// hypothesis</div>', unsafe_allow_html=True)
+                    st.markdown('<h2>Hypothesis</h2>', unsafe_allow_html=True)
                     st.latex(r"H_0: \mu_1 = \mu_2 = \dots = \mu_k \qquad H_1: \text{At least one group mean differs}")
 
                     groups_data = [adf[adf[group_col]==g][response_col].values for g in unique_grps]
                     f_val, p_val = stats.f_oneway(*groups_data)
 
-                    st.markdown('<div class="section-label">// group summary</div>', unsafe_allow_html=True)
+                    st.markdown('<h2>Group Summary</h2>', unsafe_allow_html=True)
                     summary = [[g, len(gd), np.mean(gd), np.std(gd,ddof=1), np.std(gd,ddof=1)/np.sqrt(len(gd))]
                                for g, gd in zip(unique_grps, groups_data)]
                     st.dataframe(pd.DataFrame(summary, columns=["Group","n","Mean","Std Dev","Std Error"])
@@ -779,7 +712,7 @@ if uploaded_file is not None:
 
                     tc, pc = st.columns([6, 5])
                     with tc:
-                        st.markdown('<div class="section-label">// ANOVA table</div>', unsafe_allow_html=True)
+                        st.markdown('<h2>ANOVA Table</h2>', unsafe_allow_html=True)
                         st.markdown(f"""<table class="styled-table">
                         <thead><tr><th>Source</th><th>SS</th><th>df</th><th>MS</th><th>F</th><th>p-value</th><th>F crit (α={alpha})</th></tr></thead>
                         <tbody>
@@ -793,16 +726,13 @@ if uploaded_file is not None:
                         fig.update_layout(**plotly_theme(), showlegend=False)
                         st.plotly_chart(fig, use_container_width=True)
 
-                    st.markdown('<div class="section-label"> conclusion</div>', unsafe_allow_html=True)
+                    st.markdown('<h1>Conclusion</h1>', unsafe_allow_html=True)
                     conclusion_card(p_val, alpha,
-                        f"p-value <b>{p_fmt(p_val)}</b> &lt; α={alpha} → <strong>reject H₀</strong>. At least one group mean of <code>{response_col}</code> differs significantly across <code>{group_col}</code>.",
-                        f"p-value <b>{p_fmt(p_val)}</b> ≥ α={alpha} → <strong>fail to reject H₀</strong>. No significant difference in <code>{response_col}</code> across <code>{group_col}</code> groups.")
+                        f"p-value = {p_fmt(p_val)} < α={alpha}. Reject H₀. At least one group mean differs significantly.",
+                        f"p-value = {p_fmt(p_val)} ≥ α={alpha}. Fail to reject H₀. No significant difference across groups.")
 
-        # ═════════════════════════════════════════════════════════════════════
-        # TAB 5 — CHI-SQUARE
-        # ═════════════════════════════════════════════════════════════════════
         with tabs[4]:
-            st.markdown('<div class="section-label">// chi-square test of independence</div>', unsafe_allow_html=True)
+            st.markdown('<h1>Chi-Square Test of Independence</h1>', unsafe_allow_html=True)
             if len(final_cat) < 2:
                 st.warning("Need at least 2 categorical columns.")
             else:
@@ -815,21 +745,21 @@ if uploaded_file is not None:
                 if obs_table.size < 4:
                     st.error("Each variable needs at least 2 unique levels.")
                 else:
-                    st.markdown('<div class="section-label">// hypothesis</div>', unsafe_allow_html=True)
+                    st.markdown('<h2>Hypothesis</h2>', unsafe_allow_html=True)
                     st.latex(rf"H_0: \text{{{chi_x}}} \text{{ and }} \text{{{chi_y}}} \text{{ are independent}} \qquad H_1: \text{{they are dependent}}")
 
                     chi2_stat, p_val, dof, expected = stats.chi2_contingency(obs_table)
                     exp_table = pd.DataFrame(expected, index=obs_table.index, columns=obs_table.columns)
 
                     t1, t2 = st.columns(2)
-                    t1.markdown('<div class="section-label">// observed frequencies</div>', unsafe_allow_html=True)
+                    t1.markdown('<h2>Observed Frequencies</h2>', unsafe_allow_html=True)
                     t1.dataframe(obs_table, use_container_width=True)
-                    t2.markdown('<div class="section-label">// expected frequencies</div>', unsafe_allow_html=True)
+                    t2.markdown('<h2>Expected Frequencies</h2>', unsafe_allow_html=True)
                     t2.dataframe(exp_table.style.format("{:.2f}"), use_container_width=True)
 
                     rc, pc = st.columns(2)
                     with rc:
-                        st.markdown('<div class="section-label">// test statistics</div>', unsafe_allow_html=True)
+                        st.markdown('<h2>Test Statistics</h2>', unsafe_allow_html=True)
                         cells_lt5 = (expected < 5).sum()
                         st.markdown(f"""<table class="styled-table">
                         <thead><tr><th>Statistic</th><th>Value</th><th>Excel</th></tr></thead>
@@ -841,7 +771,7 @@ if uploaded_file is not None:
                         if cells_lt5 > 0:
                             pct = cells_lt5 / expected.size * 100
                             (st.warning if pct > 20 else st.info)(
-                                f"{cells_lt5}/{expected.size} expected cells ({pct:.1f}%) < 5 — Cochran's rule: keep below 20%.")
+                                f"{cells_lt5}/{expected.size} expected cells ({pct:.1f}%) < 5. Cochran's rule: keep below 20%.")
                     with pc:
                         obs_melt = obs_table.reset_index().melt(id_vars=chi_x, value_name="Observed")
                         exp_melt = exp_table.reset_index().melt(id_vars=chi_x, value_name="Expected")
@@ -854,16 +784,13 @@ if uploaded_file is not None:
                         fig.update_layout(**plotly_theme())
                         st.plotly_chart(fig, use_container_width=True)
 
-                    st.markdown('<div class="section-label"> conclusion</div>', unsafe_allow_html=True)
+                    st.markdown('<h1>Conclusion</h1>', unsafe_allow_html=True)
                     conclusion_card(p_val, alpha,
-                        f"p-value <b>{p_fmt(p_val)}</b> &lt; α={alpha} → <strong>reject H₀</strong>. Significant association between <code>{chi_x}</code> and <code>{chi_y}</code>.",
-                        f"p-value <b>{p_fmt(p_val)}</b> ≥ α={alpha} → <strong>fail to reject H₀</strong>. No significant association between <code>{chi_x}</code> and <code>{chi_y}</code>.")
+                        f"p-value = {p_fmt(p_val)} < α={alpha}. Reject H₀. Significant association between variables.",
+                        f"p-value = {p_fmt(p_val)} ≥ α={alpha}. Fail to reject H₀. No significant association between variables.")
 
-        # ═════════════════════════════════════════════════════════════════════
-        # TAB 6 — PLAYGROUND
-        # ═════════════════════════════════════════════════════════════════════
         with tabs[5]:
-            st.markdown('<div class="section-label">// interactive stats playground</div>', unsafe_allow_html=True)
+            st.markdown('<h1>Interactive Stats Playground</h1>', unsafe_allow_html=True)
             st.markdown("<span style='color:#64748b;font-size:0.85rem;'>Select a test, tweak the code, re-run live on your dataset.</span>", unsafe_allow_html=True)
             st.write("")
 
@@ -872,12 +799,12 @@ if uploaded_file is not None:
             col_code, col_out = st.columns(2)
 
             with col_code:
-                st.markdown('<div class="section-label">// code editor</div>', unsafe_allow_html=True)
+                st.markdown('<h2>Code Editor</h2>', unsafe_allow_html=True)
                 code_input = st.text_area("Edit & Ctrl+Enter to run:",
                     value=PLAYGROUND_CODES[selected], height=380, key=f"pg_{selected}")
 
             with col_out:
-                st.markdown('<div class="section-label">// live output</div>', unsafe_allow_html=True)
+                st.markdown('<h2>Live Output</h2>', unsafe_allow_html=True)
                 env = {
                     '__builtins__': builtins,
                     'df': df, 'pd': pd, 'np': np, 'plt': plt,
@@ -887,7 +814,6 @@ if uploaded_file is not None:
                     'ttest_1samp': ttest_1samp, 'ttest_ind': ttest_ind, 'ttest_rel': ttest_rel,
                     'f_oneway': f_oneway,
                     'chisquare': chisquare, 'chi2_contingency': chi2_contingency,
-                    'linregress': linregress,
                 }
                 buf = io.StringIO()
                 sys.stdout = buf
@@ -931,11 +857,10 @@ if uploaded_file is not None:
                 st.markdown("---")
                 st.markdown(f"""
                 <div style="background:rgba(109,40,217,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:10px;padding:0.9rem 1.2rem;">
-                    <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#7c3aed;letter-spacing:0.1em;">// INFERENCE</span><br>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#7c3aed;letter-spacing:0.1em;">INFERENCE</span><br>
                     <span style="color:#c4b5fd;font-size:0.88rem;">{PLAYGROUND_HINTS[selected]}</span>
                 </div>""", unsafe_allow_html=True)
 
-# ── Landing page (no file uploaded) ───────────────────────────────────────────
 else:
     st.markdown("""
     <div class="upload-box">
@@ -963,12 +888,12 @@ else:
         <div class="landing-card">
             <div class="landing-icon">🔲</div>
             <h4>Chi-Square Test</h4>
-            <p>Contingency tables, observed vs expected, χ²</p>
+            <p>Contingency tables, observed vs expected</p>
         </div>
         <div class="landing-card">
             <div class="landing-icon">🧪</div>
             <h4>Stats Playground</h4>
-            <p>Live code editor — run T-tests, ANOVA, fits, plots</p>
+            <p>Live code editor — run tests, fits, plots</p>
         </div>
         <div class="landing-card">
             <div class="landing-icon">🤖</div>

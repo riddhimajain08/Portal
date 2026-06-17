@@ -912,40 +912,42 @@ if uploaded_file is not None:
 else:
     st.markdown("""
     <div class="upload-box">
-        <div style="font-size:3rem;margin-bottom:0.75rem;"></div>
+        <div style="font-size:3rem;margin-bottom:0.75rem;">&#128202;</div>
         <h3>Upload your dataset to begin</h3>
-        <p>Supports <code>.csv</code> and <code>.xlsx</code> — use the sidebar uploader on the left</p>
+        <p>Supports <code>.csv</code> and <code>.xlsx</code> &mdash; use the sidebar uploader on the left</p>
     </div>
+    """, unsafe_allow_html=True)
 
+    st.markdown("""
     <div class="landing-grid">
         <div class="landing-card">
-            
+            <div class="landing-icon">&#128200;</div>
             <h4>Correlation Analysis</h4>
-            <p>Pearson r, R², t-stat, p-value with scatter plot</p>
+            <p>Pearson r, R&sup2;, t-stat, p-value with scatter plot</p>
         </div>
         <div class="landing-card">
-            
+            <div class="landing-icon">&#128202;</div>
             <h4>OLS Regression</h4>
-            <p>ANOVA table, coefficients, line fit & residuals</p>
+            <p>ANOVA table, coefficients, line fit &amp; residuals</p>
         </div>
         <div class="landing-card">
-            
+            <div class="landing-icon">&#127890;</div>
             <h4>One-Way ANOVA</h4>
             <p>F-value, SS, MS, F-critical with group boxplots</p>
         </div>
         <div class="landing-card">
-            
+            <div class="landing-icon">&#129518;</div>
             <h4>Chi-Square Test</h4>
             <p>Contingency tables, observed vs expected</p>
         </div>
         <div class="landing-card">
-        
+            <div class="landing-icon">&#128187;</div>
             <h4>Stats Playground</h4>
-            <p>Live code editor — run tests, fits, plots</p>
+            <p>Live code editor &mdash; run tests, fits, plots</p>
         </div>
         <div class="landing-card">
-        
-            <h4>Auto H₀ / H₁</h4>
+            <div class="landing-icon">&#128270;</div>
+            <h4>Auto H&#8320; / H&#8321;</h4>
             <p>Hypotheses generated automatically with conclusions</p>
         </div>
     </div>
